@@ -63,7 +63,6 @@ APM 및 설치 버전은 아래와 같습니다.
 httpd 2.4.x
 php 8.0.x
 mariadb 10.6.x
-ionCube PHP Loader
 Zend OPcache
 Let's Encrypt
 phpMyAdmin
