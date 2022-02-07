@@ -2,10 +2,10 @@
  
 #####################################################################################
 #                                                                                   #
-# * APMinstaller v.1 with ROCKY8                                                    #
+# * APMinstaller v.1.1 with ROCKY8                                                  #
 # * ROCKY-8.5-x86_64                                                                #
 # * Apache 2.4.X , MariaDB 10.6.X, PHP 7.4 setup shell script                       #
-# * Created Date    : 2021/12/25                                                    #
+# * Created Date    : 2021/02/07                                                    #
 # * Created by  : Joo Sung ( webmaster@apachezone.com )                             #
 #                                                                                   #
 #####################################################################################
@@ -248,7 +248,11 @@ sed -i 's/SecRuleEngine On/SecRuleEngine DetectionOnly/' /etc/httpd/conf.d/mod_s
 service fail2ban start
 chkconfig --level 2345 fail2ban on
 
-sed -i 's,\(#filter = sshd-aggressive\),\1\nenabled = true,g;' /etc/fail2ban/jail.conf 
+sed -i 's/# enabled = true/enabled = true/' /etc/fail2ban/jail.conf
+service fail2ban restart
+
+service arpwatch start
+service arpwatch restart
 
 #clamav 설치
 yum -y install clamav-server clamav-data clamav-update clamav-filesystem clamav clamav-scanner-systemd clamav-devel clamav-lib clamav-server-systemd
