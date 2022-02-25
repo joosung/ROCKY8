@@ -1,4 +1,4 @@
-ROCKY - APMinstaller v.1.1 with ROCKY8
+APMinstaller v.1.1 with ROCKY Linux
 <pre>
 쉽고 빠른 설치, 운영, 업데이트까지 고려한 설계
 쉬운 업데이트 지원. (공식+인기 저장소를 사용하여 dnf update 만으로 업데이트 완료)
@@ -81,5 +81,8 @@ cockpit
 사용지 계정 백업 스크립트 1.0
 사용자 계정 생성 스크립트 1.0
 사용자 계정 삭제 스크립트 1.0 등...... 그외 필요한 라이브러리도 같이 설치가 됩니다. 
+
+backup, check_chkrootkit 파일의 오류 수정으로 인한 업데이트 버전 입니다.
+
 </pre>
 
