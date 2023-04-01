@@ -1,10 +1,12 @@
 #!/bin/bash
 
 ##########################################################
+#                                                        #
 # * adduser V 1.0                                        #
-# * APMinstaller v.1 with ROCKY8  전용                    #
-# * Created Date    : 2021/12/25                         #
-# * Created by  : Joo Sung ( webmaster@apachezone.com )  # 
+# * APMinstaller with ROCKY8 Linux                        #
+# * Created Date    : 2022/2/25                          #
+# * Created by  : Joo Sung ( webmaster@apachezone.com )  #
+#                                                        # 
 ##########################################################
 
 echo "
@@ -40,16 +42,20 @@ echo
 echo -n "계정 ID 입력:"
          read id
 
+echo -n "계정 패스워드 입력:"
+         read pass
+
 echo -n "도메인 주소 입력:"
          read url
 
-echo -n "계정 패스워드 입력:"
-         read pass
+echo -n "서버 php 입력하세요 (72, 73, 74, 80, 81, 82 중 하나만 선택 입력) :"
+         read php
 
 echo -n "
         계 정   : $id  
 	패스워드 : $pass
 	도메인  : $url
+	php 버전  : $php  
 
 -------------------------------------------------------------
         맞으면 <Enter>를 누르고 틀리면 No를 입력하세요: "
@@ -75,6 +81,9 @@ ServerAlias www.$url
 <Directory /home/$id/public_html>
 AllowOverride All
 </Directory>
+<FilesMatch \.php$>
+    SetHandler "proxy:fcgi://127.0.0.1:90$php"
+</FilesMatch>
     ErrorLog logs/$url-error_log
     CustomLog logs/$url-access_log common
 #SetEnvIFNoCase Referer $url link_allow 
@@ -185,11 +194,15 @@ echo -n "계정 ID를 입력 하세요 :"
 echo -n "서버 IP 입력하세요 (*:80 을 입력) :"
          read ip
 
+echo -n "서버 php 입력하세요 (72, 73, 74, 80, 81, 82 중 하나만 선택 입력) :"
+         read php
+
 echo -n "
        
           사용자 도메인 : $url
             게정 ID   : $id
             서버 IP   : $ip
+	    php 버전  : $php  
 
 -------------------------------------------------------------
         맞으면 <Enter>를 누르고 틀리면 No를 입력하세요: "
@@ -208,6 +221,9 @@ ServerAlias www.$url
 <Directory /home/$id/public_html>
 AllowOverride All
 </Directory>
+<FilesMatch \.php$>
+    SetHandler "proxy:fcgi://127.0.0.1:90$php"
+</FilesMatch>
     ErrorLog logs/$url-error_log
     CustomLog logs/$url-access_log common
 #SetEnvIFNoCase Referer $url link_allow 

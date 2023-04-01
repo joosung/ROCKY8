@@ -8,4 +8,4 @@ clamscan -r /home --move=/virus
 systemctl stop clamd.service 
 
 
-sh /root/ROCKY/restart.sh
+sh /root/ROCKY8/restart.sh

@@ -2,10 +2,10 @@
  
 #####################################################################################
 #                                                                                   #
-# * APMinstaller v.1.1 with ROCKY8                                                  #
-# * ROCKY-8.5-x86_64                                                                #
-# * Apache 2.4.X , MariaDB 10.6.X, PHP 7.4 setup shell script                       #
-# * Created Date    : 2021/02/07                                                    #
+# * APMinstaller with ROCKY8 Linux                                                  #
+# * ROCKY Linux-8.x                                                                 #
+# * Apache 2.4.X , MariaDB 10.6.X, Multi-PHP(base php7.2) setup shell script        #
+# * Created Date    : 2023/3/31                                                     #
 # * Created by  : Joo Sung ( webmaster@apachezone.com )                             #
 #                                                                                   #
 #####################################################################################
@@ -37,7 +37,7 @@ net-snmp-devel libevent-devel libtool-ltdl-devel postgresql-devel bison make pkg
 
 sudo dnf -y update
 
-cd /root/ROCKY/APM
+cd /root/ROCKY8/APM
 
 ##########################################
 #                                        #
@@ -53,12 +53,6 @@ sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 #           아파치 및 HTTP2 설치            #
 #                                        #
 ########################################## 
-
-# Nghttp2 설치
-sudo dnf --enablerepo=epel -y install libnghttp2
-
-# /etc/mime.types 설치 
-sudo dnf -y install mailcap
 
 # httpd 설치
 sudo dnf install -y httpd httpd-devel
@@ -100,8 +94,8 @@ sed -i 's/UserDir disabled/#UserDir disabled/' /etc/httpd/conf.d/userdir.conf
 sed -i 's/#UserDir public_html/UserDir public_html/' /etc/httpd/conf.d/userdir.conf
 sed -i 's/Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec/Options MultiViews SymLinksIfOwnerMatch IncludesNoExec/' /etc/httpd/conf.d/userdir.conf
 
-cp /root/ROCKY/APM/index.html /var/www/html/
-#cp -f /root/ROCKY/APM/index.html /usr/share/httpd/noindex/
+cp /root/ROCKY8/APM/index.html /var/www/html/
+#cp -f /root/ROCKY8/APM/index.html /usr/share/httpd/noindex/
 
 echo "<VirtualHost *:80>
   DocumentRoot /var/www/html
@@ -112,23 +106,136 @@ systemctl restart named.service
 
 ##########################################
 #                                        #
-#         PHP7.4 및 라이브러리 install      #
+#         PHP7.2 및 라이브러리 install      #
 #                                        #
 ########################################## 
 
-sudo dnf module reset php -y
+dnf config-manager --set-enabled remi -y
+
+dnf module reset php -y
+
+dnf module enable php:7.2 -y
+dnf module install php:7.2 -y
+
+sudo dnf module enable php:remi-7.2 -y
+
+sudo dnf -y install php72 php72-php-cli php72-php-fpm \
+php72-php-common php72-php-pdo php72-php-mysqlnd php72-php-mbstring php72-php-mcrypt \
+php72-php-opcache php72-php-xml php72-php-pecl-imagick php72-php-gd php72-php-fileinfo \
+php72-php-pecl-mysql php72-php-pecl-ssh2 php72-php-pecl-zip php72-php-soap php72-php-imap \
+php72-php-json php72-php-ldap php72-php-xml php72-php-iconv php72-php-xmlrpc php72-php-snmp \
+php72-php-pecl-apcu php72-php-pecl-geoip php72-php-pecl-memcached php72-php-pecl-redis \
+php72-php-pecl-mailparse php72-php-pgsql php72-php-process php72-php-ioncube-loader
+
+sudo dnf module enable php:remi-7.3 -y
+
+dnf -y install php73 php73-php-cli php73-php-fpm \
+php73-php-common php73-php-pdo php73-php-mysqlnd php73-php-mbstring php73-php-mcrypt \
+php73-php-opcache php73-php-xml php73-php-pecl-imagick php73-php-gd php73-php-fileinfo \
+php73-php-pecl-mysql php73-php-pecl-ssh2 php73-php-pecl-zip php73-php-soap php73-php-imap \
+php73-php-json php73-php-ldap php73-php-xml php73-php-iconv php73-php-xmlrpc php73-php-snmp \
+php73-php-pecl-apcu php73-php-pecl-geoip php73-php-pecl-memcached php73-php-pecl-redis \
+php73-php-pecl-mailparse php73-php-pgsql php73-php-process php73-php-ioncube-loader
+
+sudo dnf module enable php:remi-7.4 -y
+
+sudo dnf -y install php74 php74-php-cli php74-php-fpm \
+php74-php-common php74-php-pdo php74-php-mysqlnd php74-php-mbstring php74-php-mcrypt \
+php74-php-opcache php74-php-xml php74-php-pecl-imagick php74-php-gd php74-php-fileinfo \
+php74-php-pecl-mysql php74-php-pecl-ssh2 php74-php-pecl-zip php74-php-soap php74-php-imap \
+php74-php-json php74-php-ldap php74-php-xml php74-php-iconv php74-php-xmlrpc php74-php-snmp \
+php74-php-pecl-apcu php74-php-pecl-geoip php74-php-pecl-memcached php74-php-pecl-redis \
+php74-php-pecl-mailparse php74-php-pgsql php74-php-process php74-php-ioncube-loader
+
 sudo dnf module enable php:remi-8.0 -y
-sudo dnf install -y php php-cli php-fpm php-common php-pdo php-mysqlnd php-mbstring php-opcache php-gd php-zip \
-php-soap php-devel php-json php-ldap php-xml php-iconv php-xmlrpc php-snmp php-pgsql php-process php-curl php-intl php-fileinfo
 
-sudo dnf install -y GeoIP GeoIP-data GeoIP-devel
+sudo dnf -y install php80 php80-php-cli php80-php-fpm \
+php80-php-common php80-php-pdo php80-php-mysqlnd php80-php-mbstring php80-php-mcrypt \
+php80-php-opcache php80-php-xml php80-php-pecl-imagick php80-php-gd php80-php-fileinfo \
+php80-php-pecl-mysql php80-php-pecl-ssh2 php80-php-pecl-zip php80-php-soap php80-php-imap \
+php80-php-json php80-php-ldap php80-php-xml php80-php-iconv php80-php-xmlrpc php80-php-snmp \
+php80-php-pecl-apcu php80-php-pecl-geoip php80-php-pecl-memcached php80-php-pecl-redis \
+php80-php-pecl-mailparse php80-php-pgsql php80-php-process
 
+sudo dnf module enable php:remi-8.1 -y
+
+sudo dnf -y install php81 php81-php-cli php81-php-fpm \
+php81-php-common php81-php-pdo php81-php-mysqlnd php81-php-mbstring php81-php-mcrypt \
+php81-php-opcache php81-php-xml php81-php-pecl-imagick php81-php-gd php81-php-fileinfo \
+php81-php-pecl-mysql php81-php-pecl-ssh2 php81-php-pecl-zip php81-php-soap php81-php-imap \
+php81-php-json php81-php-ldap php81-php-xml php81-php-iconv php81-php-xmlrpc php81-php-snmp \
+php81-php-pecl-apcu php81-php-pecl-geoip php81-php-pecl-memcached php81-php-pecl-redis \
+php81-php-pecl-mailparse php81-php-pgsql php81-php-process
+
+sudo dnf module enable php:remi-8.2 -y
+
+sudo dnf -y install php82 php82-php-cli php82-php-fpm \
+php82-php-common php82-php-pdo php82-php-mysqlnd php82-php-mbstring php82-php-mcrypt \
+php82-php-opcache php82-php-xml php82-php-pecl-imagick php82-php-gd php82-php-fileinfo \
+php82-php-pecl-mysql php82-php-pecl-ssh2 php82-php-pecl-zip php82-php-soap php82-php-imap \
+php82-php-json php82-php-ldap php82-php-xml php82-php-iconv php82-php-xmlrpc php82-php-snmp \
+php82-php-pecl-apcu php82-php-pecl-geoip php82-php-pecl-memcached php82-php-pecl-redis \
+php82-php-pecl-mailparse php82-php-pgsql php82-php-process
+
+
+echo 'listen = 127.0.0.1:9072
+pm = ondemand' >> /etc/opt/remi/php72/php-fpm.d/www.conf
+
+echo 'listen = 127.0.0.1:9073
+pm = ondemand' >> /etc/opt/remi/php73/php-fpm.d/www.conf
+
+echo 'listen = 127.0.0.1:9074
+pm = ondemand' >> /etc/opt/remi/php74/php-fpm.d/www.conf
+
+echo 'listen = 127.0.0.1:9080
+pm = ondemand' >> /etc/opt/remi/php80/php-fpm.d/www.conf
+
+echo 'listen = 127.0.0.1:9081
+pm = ondemand' >> /etc/opt/remi/php81/php-fpm.d/www.conf
+
+echo 'listen = 127.0.0.1:9082
+pm = ondemand' >> /etc/opt/remi/php82/php-fpm.d/www.conf
+
+systemctl start php-fpm
+systemctl enable php-fpm
+
+sudo systemctl start php72-php-fpm
+sudo systemctl enable php72-php-fpm
+
+sudo systemctl start php73-php-fpm
+sudo systemctl enable php73-php-fpm
+
+sudo systemctl start php74-php-fpm
+sudo systemctl enable php74-php-fpm
+
+sudo systemctl start php80-php-fpm
+sudo systemctl enable php80-php-fpm
+
+sudo systemctl start php81-php-fpm
+sudo systemctl enable php81-php-fpm
+
+sudo systemctl start php82-php-fpm
+sudo systemctl enable php82-php-fpm
+
+#sed -i 's/php_value/#php_value/' /etc/httpd/conf.d/php.conf
+
+echo '<Files ".user.ini">
+  Require all denied
+</Files>
+AddType text/html .php
+DirectoryIndex index.php
+SetEnvIfNoCase ^Authorization$ "(.+)" HTTP_AUTHORIZATION=$1
+<FilesMatch \.php$>
+  SetHandler "proxy:fcgi://127.0.0.1:9072"
+</FilesMatch>' >> /etc/httpd/conf.d/php.conf
+
+
+sudo dnf install -y GeoIP-devel
 echo "#geoip setup
 <IfModule mod_geoip.c>
  GeoIPEnable On
  GeoIPDBFile /usr/share/GeoIP/GeoIP.dat MemoryCache
 </IfModule>" > /etc/httpd/conf.d/geoip.conf
-
 
 cp -av /etc/php.ini /etc/php.ini.original
 sed -i 's/short_open_tag = Off/short_open_tag = On/' /etc/php.ini
@@ -143,25 +250,84 @@ sed -i 's/;date.timezone =/date.timezone = "Asia\/Seoul"/' /etc/php.ini
 sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/php.ini
 sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/php.ini 
 
-##########################################
-#                                        #
-#         ioncube_loader install         #
-#                                        #
-########################################## 
+cp -av /etc/opt/remi/php72/php.ini /etc/opt/remi/php72/php.ini.original
+sed -i 's/short_open_tag = Off/short_open_tag = On/' /etc/opt/remi/php72/php.ini
+sed -i 's/expose_php = On/expose_php = Off/' /etc/opt/remi/php72/php.ini
+sed -i 's/display_errors = Off/display_errors = On/' /etc/opt/remi/php72/php.ini
+sed -i 's/;error_log = php_errors.log/error_log = php_errors.log/' /etc/opt/remi/php72/php.ini
+sed -i 's/error_reporting = E_ALL \& ~E_DEPRECATED/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_USER_DEPRECATED/' /etc/opt/remi/php72/php.ini
+sed -i 's/variables_order = "GPCS"/variables_order = "EGPCS"/' /etc/opt/remi/php72/php.ini
+sed -i 's/post_max_size = 8M/post_max_size = 100M/' /etc/opt/remi/php72/php.ini
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' /etc/opt/remi/php72/php.ini
+sed -i 's/;date.timezone =/date.timezone = "Asia\/Seoul"/' /etc/opt/remi/php72/php.ini
+sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/opt/remi/php72/php.ini
+sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/opt/remi/php72/php.ini 
 
-#cd /root/ROCKY
+cp -av /etc/opt/remi/php73/php.ini /etc/opt/remi/php73/php.ini.original
+sed -i 's/short_open_tag = Off/short_open_tag = On/' /etc/opt/remi/php73/php.ini
+sed -i 's/expose_php = On/expose_php = Off/' /etc/opt/remi/php73/php.ini
+sed -i 's/display_errors = Off/display_errors = On/' /etc/opt/remi/php73/php.ini
+sed -i 's/;error_log = php_errors.log/error_log = php_errors.log/' /etc/opt/remi/php73/php.ini
+sed -i 's/error_reporting = E_ALL \& ~E_DEPRECATED/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_USER_DEPRECATED/' /etc/opt/remi/php73/php.ini
+sed -i 's/variables_order = "GPCS"/variables_order = "EGPCS"/' /etc/opt/remi/php73/php.ini
+sed -i 's/post_max_size = 8M/post_max_size = 100M/' /etc/opt/remi/php73/php.ini
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' /etc/opt/remi/php73/php.ini
+sed -i 's/;date.timezone =/date.timezone = "Asia\/Seoul"/' /etc/opt/remi/php73/php.ini
+sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/opt/remi/php73/php.ini
+sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/opt/remi/php73/php.ini 
 
-#wget http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
+cp -av /etc/opt/remi/php74/php.ini /etc/opt/remi/php74/php.ini.original
+sed -i 's/short_open_tag = Off/short_open_tag = On/' /etc/opt/remi/php74/php.ini
+sed -i 's/expose_php = On/expose_php = Off/' /etc/opt/remi/php74/php.ini
+sed -i 's/display_errors = Off/display_errors = On/' /etc/opt/remi/php74/php.ini
+sed -i 's/;error_log = php_errors.log/error_log = php_errors.log/' /etc/opt/remi/php74/php.ini
+sed -i 's/error_reporting = E_ALL \& ~E_DEPRECATED/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_USER_DEPRECATED/' /etc/opt/remi/php74/php.ini
+sed -i 's/variables_order = "GPCS"/variables_order = "EGPCS"/' /etc/opt/remi/php74/php.ini
+sed -i 's/post_max_size = 8M/post_max_size = 100M/' /etc/opt/remi/php74/php.ini
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' /etc/opt/remi/php74/php.ini
+sed -i 's/;date.timezone =/date.timezone = "Asia\/Seoul"/' /etc/opt/remi/php74/php.ini
+sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/opt/remi/php74/php.ini
+sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/opt/remi/php74/php.ini 
 
-#tar xfz ioncube_loaders_lin_x86-64.tar.gz
+cp -av /etc/opt/remi/php80/php.ini /etc/opt/remi/php80/php.ini.original
+sed -i 's/short_open_tag = Off/short_open_tag = On/' /etc/opt/remi/php80/php.ini
+sed -i 's/expose_php = On/expose_php = Off/' /etc/opt/remi/php80/php.ini
+sed -i 's/display_errors = Off/display_errors = On/' /etc/opt/remi/php80/php.ini
+sed -i 's/;error_log = php_errors.log/error_log = php_errors.log/' /etc/opt/remi/php80/php.ini
+sed -i 's/error_reporting = E_ALL \& ~E_DEPRECATED/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_USER_DEPRECATED/' /etc/opt/remi/php80/php.ini
+sed -i 's/variables_order = "GPCS"/variables_order = "EGPCS"/' /etc/opt/remi/php80/php.ini
+sed -i 's/post_max_size = 8M/post_max_size = 100M/' /etc/opt/remi/php80/php.ini
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' /etc/opt/remi/php80/php.ini
+sed -i 's/;date.timezone =/date.timezone = "Asia\/Seoul"/' /etc/opt/remi/php80/php.ini
+sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/opt/remi/php80/php.ini
+sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/opt/remi/php80/php.ini 
 
-#cp /root/ROCKY/ioncube/ioncube_loader_lin_7.4_ts.so /usr/lib64/php/modules/
+cp -av /etc/opt/remi/php81/php.ini /etc/opt/remi/php81/php.ini.original
+sed -i 's/short_open_tag = Off/short_open_tag = On/' /etc/opt/remi/php81/php.ini
+sed -i 's/expose_php = On/expose_php = Off/' /etc/opt/remi/php81/php.ini
+sed -i 's/display_errors = Off/display_errors = On/' /etc/opt/remi/php81/php.ini
+sed -i 's/;error_log = php_errors.log/error_log = php_errors.log/' /etc/opt/remi/php81/php.ini
+sed -i 's/error_reporting = E_ALL \& ~E_DEPRECATED/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_USER_DEPRECATED/' /etc/opt/remi/php81/php.ini
+sed -i 's/variables_order = "GPCS"/variables_order = "EGPCS"/' /etc/opt/remi/php81/php.ini
+sed -i 's/post_max_size = 8M/post_max_size = 100M/' /etc/opt/remi/php81/php.ini
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' /etc/opt/remi/php81/php.ini
+sed -i 's/;date.timezone =/date.timezone = "Asia\/Seoul"/' /etc/opt/remi/php81/php.ini
+sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/opt/remi/php81/php.ini
+sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/opt/remi/php81/php.ini 
 
-#chmod 755 /usr/lib64/php/modules/ioncube_loader_lin_7.4_ts.so
+cp -av /etc/opt/remi/php82/php.ini /etc/opt/remi/php82/php.ini.original
+sed -i 's/short_open_tag = Off/short_open_tag = On/' /etc/opt/remi/php82/php.ini
+sed -i 's/expose_php = On/expose_php = Off/' /etc/opt/remi/php82/php.ini
+sed -i 's/display_errors = Off/display_errors = On/' /etc/opt/remi/php82/php.ini
+sed -i 's/;error_log = php_errors.log/error_log = php_errors.log/' /etc/opt/remi/php82/php.ini
+sed -i 's/error_reporting = E_ALL \& ~E_DEPRECATED/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_USER_DEPRECATED/' /etc/opt/remi/php82/php.ini
+sed -i 's/variables_order = "GPCS"/variables_order = "EGPCS"/' /etc/opt/remi/php82/php.ini
+sed -i 's/post_max_size = 8M/post_max_size = 100M/' /etc/opt/remi/php82/php.ini
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' /etc/opt/remi/php82/php.ini
+sed -i 's/;date.timezone =/date.timezone = "Asia\/Seoul"/' /etc/opt/remi/php82/php.ini
+sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/opt/remi/php82/php.ini
+sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/opt/remi/php82/php.ini 
 
-#echo "zend_extension = /usr/lib64/php/modules/ioncube_loader_lin_7.4.so" >> /etc/php.ini
-
-#rm -rf ioncube*
 
 ##########################################
 #                                        #
@@ -173,15 +339,22 @@ mkdir /etc/skel/public_html
 
 chmod 707 /etc/skel/public_html
 
-chmod 700 /root/ROCKY/adduser.sh
+chmod 700 /root/ROCKY8/adduser.sh
 
-chmod 700 /root/ROCKY/deluser.sh
+chmod 700 /root/ROCKY8/deluser.sh
 
-chmod 700 /root/ROCKY/clamav.sh
+chmod 700 /root/ROCKY8/clamav.sh
 
-chmod 700 /root/ROCKY/restart.sh
+chmod 700 /root/ROCKY8/restart.sh
 
-cp /root/ROCKY/APM/skel/index.html /etc/skel/public_html/
+cp /root/ROCKY8/APM/skel/index.html /etc/skel/public_html/
+
+rm -rf /etc/httpd/conf.d/php72-php.conf
+rm -rf /etc/httpd/conf.d/php73-php.conf
+rm -rf /etc/httpd/conf.d/php74-php.conf
+rm -rf /etc/httpd/conf.d/php80-php.conf
+rm -rf /etc/httpd/conf.d/php81-php.conf
+rm -rf /etc/httpd/conf.d/php82-php.conf
 
 systemctl restart httpd
 
@@ -189,6 +362,13 @@ systemctl restart httpd
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ && ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
 
 sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/php.ini
+sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/opt/remi/php72/php.ini
+sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/opt/remi/php73/php.ini
+sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/opt/remi/php74/php.ini
+sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/opt/remi/php80/php.ini
+sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/opt/remi/php81/php.ini
+sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/opt/remi/php82/php.ini
+
 
 systemctl restart httpd
 
@@ -211,22 +391,13 @@ sudo systemctl enable mariadb
 
 sudo mariadb-secure-installation
 
-# S.M.A.R.T. 디스크 모니터링을 설치
-dnf -y install smartmontools
-
-systemctl enable smartd
-
-systemctl start smartd
-
 ##########################################
 #                                        #
 #        운영 및 보안 관련 추가 설정           #
 #                                        #
 ##########################################
 
-cd /root/ROCKY/
-
-yum -y install glibc-static
+cd /root/ROCKY8/
 
 #chkrootkit 설치
 tar xvfz chkrootkit.tar.gz
@@ -237,7 +408,7 @@ cd chkrootkit
 
 make sense
 
-rm -rf /root/ROCKY/chkrootkit.tar.gz
+rm -rf /root/ROCKY8/chkrootkit.tar.gz
 
 #mod_security fail2ban.noarch arpwatch 설치
 dnf -y install  mod_security mod_security_crs fail2ban arpwatch
@@ -248,14 +419,11 @@ sed -i 's/SecRuleEngine On/SecRuleEngine DetectionOnly/' /etc/httpd/conf.d/mod_s
 service fail2ban start
 chkconfig --level 2345 fail2ban on
 
-sed -i 's/# enabled = true/enabled = true/' /etc/fail2ban/jail.conf
+#sed -i 's/# enabled = true/enabled = true/' /etc/fail2ban/jail.conf 
 service fail2ban restart
 
-service arpwatch start
-service arpwatch restart
-
 #clamav 설치
-yum -y install clamav-server clamav-data clamav-update clamav-filesystem clamav clamav-scanner-systemd clamav-devel clamav-lib clamav-server-systemd
+dnf -y install clamav-server clamav-data clamav-update clamav-filesystem clamav clamav-scanner-systemd clamav-devel clamav-lib clamav-server-systemd
 
 cp /usr/share/doc/clamd/clamd.conf /etc/clamd.conf
 
@@ -312,7 +480,7 @@ systemctl stop clamd.service
 
 mkdir /virus
 mkdir /backup
-mkdir /root/ROCKY/php
+mkdir /root/ROCKY8/php
 
 #memcache 설치
 sudo dnf install -y memcached libmemcached
@@ -359,28 +527,34 @@ rm -f /tmp/httpd.conf_tempfile
 #                                        #
 ##########################################
 
-mv /root/ROCKY/APM/etc/cron.daily/backup /etc/cron.daily/
-mv /root/ROCKY/APM/etc/cron.daily/check_chkrootkit /etc/cron.daily/
+mv /root/ROCKY8/APM/etc/cron.daily/backup /etc/cron.daily/
+mv /root/ROCKY8/APM/etc/cron.daily/check_chkrootkit /etc/cron.daily/
 
 chmod 700 /etc/cron.daily/backup
 chmod 700 /etc/cron.daily/check_chkrootkit
 
 
 echo "0 0,12 * * * root python -c 'import random; import time; time.sleep(random.random() * 3600)' && /usr/local/bin/certbot-auto renew" | sudo tee -a /etc/crontab > /dev/null
-echo "01 01 * * 7 /root/ROCKY/clamav.sh" >> /etc/crontab
+echo "01 01 * * 7 /root/ROCKY8/clamav.sh" >> /etc/crontab
 
 #openssl 로 디피-헬만 파라미터(dhparam) 키 만들기 둘중 하나 선택
 #openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
 openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 
 #중요 폴더 및 파일 링크
-ln -s /etc/httpd/conf.d /root/ROCKY/conf.d
-ln -s /etc/my.cnf /root/ROCKY/my.cnf
-ln -s /etc/php.ini /root/ROCKY/php.ini
+ln -s /etc/httpd/conf.d /root/ROCKY8/conf.d
+ln -s /etc/my.cnf /root/ROCKY8/my.cnf
+ln -s /etc/php.ini /root/ROCKY8/php/php.ini
+ln -s /etc/opt/remi/php72/php.ini /root/ROCKY8/php/php72.ini
+ln -s /etc/opt/remi/php73/php.ini /root/ROCKY8/php/php73.ini
+ln -s /etc/opt/remi/php74/php.ini /root/ROCKY8/php/php74.ini
+ln -s /etc/opt/remi/php80/php.ini /root/ROCKY8/php/php80.ini
+ln -s /etc/opt/remi/php81/php.ini /root/ROCKY8/php/php81.ini
+ln -s /etc/opt/remi/php82/php.ini /root/ROCKY8/php/php82.ini
 
 service httpd restart
 
-cd /root/ROCKY
+cd /root/ROCKY8
 
 ##########################################
 #                                        #

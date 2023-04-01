@@ -1,10 +1,12 @@
 #!/bin/bash
 
 ##########################################################
+#                                                        #
 # * Backup V 1.0                                         #
-# * APMinstaller v.1 with ROCKY8  전용                    #
-# * Created Date    : 2021/12/25                         #
-# * Created by  : Joo Sung ( webmaster@apachezone.com )  # 
+# * APMinstaller with ROCKY Linux                        #
+# * Created Date    : 2022/2/25                          #
+# * Created by  : Joo Sung ( webmaster@apachezone.com )  #
+#                                                        # 
 ##########################################################
 
 # 로컬 풀 백업 설정

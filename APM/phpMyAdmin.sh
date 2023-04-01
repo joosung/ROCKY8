@@ -2,10 +2,10 @@
  
 #####################################################################################
 #                                                                                   #
-# * APMinstaller v.1 with ROCKY8                                                    #
-# * CentOS-8-x86_64-1911                                                            #
+# * APMinstaller with ROCKY8 Linux                                                  #
+# * ROCKY Linux-8.x                                                                 #
 # * Apache 2.4.X , MariaDB 10.6.X, Multi-PHP(base php7.2) setup shell script        #
-# * Created Date    : 2021/12/25                                                    #
+# * Created Date    : 2023/3/31                                                     #
 # * Created by  : Joo Sung ( webmaster@apachezone.com )                             #
 #                                                                                   #
 #####################################################################################
@@ -16,13 +16,13 @@
 #           phpMyAdmin install           #
 #                                        #
 ########################################## 
-cd /root/ROCKY/APM
+cd /root/ROCKY8/APM
 
-wget https://files.phpmyadmin.net/phpMyAdmin/5.1.3/phpMyAdmin-5.1.3-all-languages.tar.gz
+wget https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.tar.gz
 
-tar -zxvf phpMyAdmin-5.1.3-all-languages.tar.gz
+tar -zxvf phpMyAdmin-5.2.1-all-languages.tar.gz
 
-mv phpMyAdmin-5.1.3-all-languages /usr/share/phpMyAdmin
+mv phpMyAdmin-5.2.1-all-languages /usr/share/phpMyAdmin
 
 
 cp -pr /usr/share/phpMyAdmin/config.sample.inc.php /usr/share/phpMyAdmin/config.inc.php
@@ -36,9 +36,9 @@ mv phpMyAdmin.conf /etc/httpd/conf.d/
 mkdir /usr/share/phpMyAdmin/tmp
 chmod 777 /usr/share/phpMyAdmin/tmp
 
-sh /root/ROCKY/restart.sh
+sh /root/ROCKY8/restart.sh
 
-cd /root/ROCKY/
+cd /root/ROCKY8/
 
 echo ""
 echo ""
